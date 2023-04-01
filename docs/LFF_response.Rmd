@@ -1,0 +1,53 @@
+---
+title: "LFF: Visualising Phylogentic Trees"
+author: "Your Name Here" # Edit your name into here
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+<!-- Here be code dragons -->
+<!-- Ignore everything up to the sections in  the following code chunks and style setting.
+This text is an RMarkdown comment so won't "render" when you "compile" this document -->
+
+<!-- This is some basic css style to format your written responses in this document -->
+<style>
+div.response {
+background-color: #DBDBDB;
+padding: 5px;
+border: 1px solid black;
+margin-left: 25px;
+border-radius: 5px;
+font-style: italic;
+}
+</style>
+
+```{r setup, include=FALSE}
+rm(list = ls()) # Clear the environment when knitting the document
+knitr::opts_chunk$set(echo = TRUE) # Echo (print) the code used in code chunks in the compile document
+```
+
+```{r}
+library(pacman) # load the pacman package
+
+p_load(tidyverse, 
+       rio, # package for easy import/export of data
+       treeio, # package for input/output tree data
+       ggtree) # visualising trees with syntax like ggplot (included in tidyverse)
+```
+
+# Start Here!
+
+This is the code chunk talked about in the main document. You can try pressing the play button and do things like change the text or do some other basic math in the code chunk to see that this is basically a mini `R` console.
+
+```{r}
+print("This is a code chunk!")
+
+2+2
+```
+
+# Importing Our Tree
+
+
+
+
+

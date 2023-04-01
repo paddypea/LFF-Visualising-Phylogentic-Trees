@@ -1,7 +1,7 @@
 ---
 title: 'LFF: Visualising Phylogentic Trees'
 author: "Patrick Peacock"
-date: "`r Sys.Date()`"
+# date: "`r Sys.Date()`"
 output:
   html_document:
     toc: yes
@@ -60,7 +60,7 @@ Check you have the following files from the LFF folder provided.
 
 -   VisualisingTrees.html
     -   this file, good work!
--   lff_response.rmd
+-   <a href="LFF_response.Rmd">LFF_response.Rmd</a>
     -   the Rmarkdown document you will work in
 -   Shigella_tree.txt
     -   taken from https://epirhandbook.com/en/
