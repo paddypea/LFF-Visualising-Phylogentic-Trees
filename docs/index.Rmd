@@ -16,8 +16,9 @@ output:
 This text is an RMarkdown comment so won't "render" when you "compile" this document -->
 
 ```{r setup, include=FALSE}
-# rm(list = ls())
+rm(list = ls())
 knitr::opts_chunk$set(echo = TRUE)
+library(kableExtra)
 ```
 
 <style>
@@ -98,8 +99,17 @@ p_load(tidyverse,
        ggtree) # visualising trees with syntax like ggplot (included in tidyverse)
 ```
 
+While we are here, lets check we have installed / updated the packages needed for `rmarkdown` and `knitting`.
+
+> Run the following in your RStudio command line.
+
+`install.packages(c("rmarkdown", "knitr"))`
+
 We are ready to rock! We will actually not be starting in `R` but good on you for getting everything set up!
 
+<center>
+![](Images/clap.gif)
+</center>
 
 # Interactive Tree of Life
 
@@ -285,17 +295,13 @@ tree <- read.tree("subtree.txt") # Import our tree file
 plot(tree) # Default plotting using base R
 
 ggtree(tree) # Default plotting using ggtree
+
+ggtree(tree, layout = "circular") # By default ggtree will plot rectangular, use this to plot circular
 ```
 
 You will also notice that when you run a chunk with multiple plots like this, they will tab themselves within the document. In this webpage they show up separately as this is how the document is knitted.
 
 ![You can also press the left button in the top right corner to show this in a new window](Images/rmd_tab.png)
-
-
-
-
-
-
 
 Answer the following question in your response document.
 
@@ -305,62 +311,198 @@ The default `ggtree` does not include much since it requires you to be more expl
 
 
 ```{r}
-p <- ggtree(tree) + geom_tiplab(size = 3) # add on tip labels to your plot with the given size
+p <- ggtree(tree) + geom_tiplab(size = 2) # add on tip labels to your plot with the given size
 
 p # since the above line creates the 'p' object, we need to print it by writing it here
 ```
+
 <div class="response">
 **Note:** When asigning a plot to a variable (`p` above), we need to then state it so it prints into the document. Because we are working in an rmarkdown document, you will notice it doesn't show up in the usual `RStudio` plot window. To do this, you can just type `p` enter into your `R` console since this is stored in your environment. You can try it now and see the plot show up in your plot window.
 </div>
 
+## Importing and Attaching Data
 
-
-
-
-
-
-
-
-
-
+First we import our data. This is very straightforward as we are using the packed `rio` (for R Input/Output). It will detect the file type and import appropriate (most of the time).
 
 ```{r}
-random.tree <- rtree(10)
-
-rp <- ggtree(random.tree)
-rp
+epidata <- import("subtree_epidata.csv")
 ```
 
+Simple!
 
+Lets have a look at what is in our epidata. You can do this by just clicking on the object in the top right panel of `RStudio`. Click on **epidata** and it will view it in the main `RStudio` panel.
 
+```{r echo = FALSE}
+kbl(epidata) %>% kable_styling(full_width = F) %>% scroll_box(height = "400px")
+```
 
+We need to attach epi or meta data to our tree. We do this using the **attacher** operator: `%<+%`
 
+Yes, it is a bit of a weird one. The general syntax is as follows 
 
+```
+plotobject %<+% data
+```
+
+You can think of this like an assignment (`<-`) combined with the `+` because you are adding data in.
 
 <div class="response">
-Example response
-
-Line breaks work alright?
+**Important!** The first column of your epidata needs contain the same labels as present in your tree object so that `R` knows which sequence is associated with which epidata entry.
 </div>
 
-
-
-
-## Setup
+This is how we do it here
 
 ```{r}
-subtree_1 <- read.tree("subtree_p.txt")
-
-subtree_2 <- read.tree("subtree_pex.txt")
+p <- ggtree(tree) %<+% epidata #attach our epidata to the tree object and reassign (update it)
 ```
+
+## Visualising Our Data
+
+Now the fun stuff!
+
+We see that we have a few bits of data with the most complete being `Residence`. Our data set seems to be a bit odd in terms of location but it must make for an interesting group then.
+
+Like we discussed before, we *add* the tip label to the plot object. This time, specifying that we want to fill based on `Residence` and apply this to the `label` geometry of our tree. This looks something like this:
 
 ```{r}
+p_res <- p + geom_tiplab(aes(fill = Residence), geom = "label", size = 2) 
 
-ggtree(subtree_1) + geom_tiplab(size = 4) +  
-  geom_text(aes(label = node), size = 5, color = "darkred", hjust = 1, vjust = 1)
-
-
-
+p_res
 ```
 
+Looking at this we can see some groupings and potential clades of samples based ont he tree structure and the regions.
 
+We can highlight clades of interest. This is done based on the internal **node** reference structure in the tree. The easiest way to identify these is to add the nodes to our plot for visual inspection. We do this by adding some text geometry and specify that we want to see the node labels and colour them so they are visible.
+
+```{r}
+p_node <- p_res + geom_text(aes(label = node), size = 5, colour = "darkred")
+
+p_node
+```
+
+On your response document you will definitely want to launch this in a new window or load `p_node` in your console and zoom in.
+
+These node numbers are generated as a part of the tree file and can be referred to for colouring, rotating and general manipulation of a tree.
+
+We can kind of see that there are a few distinct groupings and the parent node of these are `79` (arguably you could split this between the two states and `Sample_210` is in an interesting position but we will keep this simple), `70` and `60`.
+
+Now we have identified these, we can apply some highlighting to these regions.
+
+You will also see below that it can be helpful for managing your code, and so it is readable, to write over multiple lines. You can continue lines of code in things like plots by ending the line with a `+` and entering to the line below.
+
+```{r}
+p_highlight <- p_res + 
+  geom_highlight(node = 79, fill = "yellow") +
+  geom_highlight(node = 70, fill = "lightblue")
+
+p_highlight
+```
+
+Hmm, that doesn't cover all the way across. We can manually extend the region, which does become a bit of an exercise in tuning these numbers. Which is why it is very helpful to be able to rerun code in a chunk!
+
+```{r}
+p_highlight <- p_res + 
+  geom_highlight(node = 79, fill = "yellow", extend = 0.01) +
+  geom_highlight(node = 70, fill = "lightblue", extend = 0.015)
+
+p_highlight
+```
+
+Your turn to add the final group at node `60`.
+
+> In your response document, add the extra line of code, with extend if need be, for node `60`
+
+Lets go back to our clean tree and show another way to add epidata.
+
+We can also add a variable to the end of the leaves of our tree. Lets do that for the `Sex` variable.
+
+```{r}
+p_tip <- p + geom_tiplab(size = 2) + # To add the basic sampe_id back
+  geom_tippoint(aes(color = Sex), size = 2)
+
+p_tip
+```
+
+## Adding Heatmaps - EXTENSION ONLY
+
+Heatmaps can get reasonably complex and this area is a bit under development with some new packages being added.
+
+This is included just for reference and peoples curiosity. You can copy this code and run it but this is not expected.
+
+This is challenging to automate and requires a bit of tuning of parameters to get these to look nice and we will look at some of this during our session.
+
+```{r message=FALSE}
+p_load(ggnewscale) # We need another library for compilation
+
+# Data preparation
+epi_travel <- data.frame("Travel" = epidata$Travel)
+rownames(epi_travel) <- epidata$Sample_ID
+epi_drugres <- data.frame("DrugRes" = epidata$Resistance)
+rownames(epi_drugres) <- epidata$Sample_ID
+
+# Then we need to go through and add the heatmap layers iteratively
+
+# First the travel information
+p_heat <- gheatmap(p_res + new_scale_fill(), 
+                   epi_travel,
+                   colnames = FALSE,
+                   width = 0.03,
+                   offset = 0.005) +
+  scale_fill_manual(name = "Travel", 
+                    breaks = c("International", "State"), 
+                    values = c("red", "blue"),
+                    na.value = "white") 
+
+# Now some drug resistance information
+p_heat <- gheatmap(p_heat + new_scale_fill(),
+                   epi_drugres,
+                   colnames = FALSE,
+                   width = 0.03,
+                   offset = 0.01) +
+  scale_fill_manual(name = "Drug Resistance",
+                    breaks = c("Drug A", "Drug B", "Drug C"),
+                    values = c("green", "purple", "orange"),
+                    na.value = "white")
+
+p_heat
+```
+
+# Random Tree Exercise
+
+The final section in the response document will generate a randomly shaped tree and random dataset for you to use to create a plot based on what you have learned during this session.
+
+
+Below is a code chunk to generate a random tree and a random dataset.
+
+`set.seed` is there to make the random chance repeatable. Make up a number yourself and replace the `1234` with it. This means that when you submit this to me, I will see the results you worked with, but everyone in our group will generate a different tree when they use a different number.
+
+You can check this against the same seed in your response document to see. Then change the seed to a different number you make up.
+
+```{r}
+set.seed(1234)
+size = 10
+
+random_tree <- rtree(size)
+
+random_data <- data.frame("ID" = random_tree$tip.label,
+                          "Location" = sample(c("QLD","NSW","VIC"), size, replace = TRUE),
+                          "Sex" = sample(c("Male", "Female"), size, replace = TRUE),
+                          "Travel" = sample(c("Overseas", ""), size, replace = TRUE, prob = c(0.2, 0.8)))
+
+r <- ggtree(random_tree) + geom_tiplab()
+r
+```
+
+I'm very interested to see what you can make!
+
+# Submission
+
+To submit your response to me you can either email the `LFF_response.rmd` document and/or a compiled html page that you can knit by pressing the `Knit` option at the top of your main RStudio window. ![](Images/knit.png)
+
+This will generate a .html page in the folder you were working in. Email that to me.
+
+That's it. You are done!
+
+<center>
+![](Images/cheers.gif)
+</center>

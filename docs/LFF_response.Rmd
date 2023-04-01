@@ -35,7 +35,7 @@ p_load(tidyverse,
        ggtree) # visualising trees with syntax like ggplot (included in tidyverse)
 ```
 
-# Start Here!
+## Start Here!
 
 This is the code chunk talked about in the main document. You can try pressing the play button and do things like change the text or do some other basic math in the code chunk to see that this is basically a mini `R` console.
 
@@ -45,9 +45,119 @@ print("This is a code chunk!")
 2+2
 ```
 
-# Importing Our Tree
+## Importing Our Tree
 
+Import and plot the subtree that we created earlier.
 
+```{r}
+tree <- read.tree("subtree.txt") # Import our tree file
+#tree <- read.tree("subtree_backup.txt") # Uncomment this line and comment the above line if you need to use the backup version.
 
+plot(tree) # Default plotting using base R
 
+ggtree(tree) # Default plotting using ggtree
+```
 
+**What are the differences between the trees in `R` and the visualisation we had in iTOL?**
+
+<div class="response">
+Type your response in here.
+</div>
+
+## Importing, Attaching and Visualising
+
+Import our data and attach it.
+
+```{r}
+p <- ggtree(tree) + geom_tiplab(size = 3) # Creating our tree object properly
+
+epidata <- import("subtree_epidata.csv")
+
+p <- ggtree(tree) %<+% epidata #attach our epidata to the tree object and reassign (update it)
+```
+
+Don't forget you can view this by clicking on the `epidata` object in the **Environment** window.
+
+Run the chunk below to see the plot with the coloured labels based on `Residence`. *Note we are changing some object names so that we don't overlap on our code objects.*
+
+```{r}
+p_res <- p + geom_tiplab(aes(fill = Residence), geom = "label", size = 2) 
+
+p_res
+```
+
+You might want to view this in another window. Or load this into your plot window by entering `p` into your R console and then doing **Zoom** in the plot window to enlargen and resize.
+
+**In the code chunk below, change it so that the tree label colouring is done based on the `Sex` variable**
+
+The basics have been put in there and but we are saving it into a different plot object to separate it from the earlier code. Complete the rest yourself.
+
+```{r}
+p_sex <- p + geom_tiplab() 
+
+p_sex
+```
+
+Run the code below to highlight nodes of interest.
+
+Recall that this is done based on the internal **node** reference structure in the tree. The easiest way to identify these is to add the nodes to our plot for visual inspection. We do this by adding some text geometry and specify that we want to see the node labels and colour them so they are visible.
+
+```{r}
+p_node <- p_res + geom_text(aes(label = node), size = 5, colour = "darkred")
+
+p_node
+```
+
+As mentioned, launch this into a new window or enter `p_node` in your console and zoom in.
+
+You saw the code to add the highlighting. Your turn to add the final group at node `60` to the below code. At the moment it will reproduce what is presented on the webpage.
+
+**In the code chunk below, add the code necessary to add the highlighting (choose a colour) to include node `60`.**
+
+Don't forget the `+` at the end to go to the next line of code!
+
+```{r}
+p_highlight <- p_res + 
+  geom_highlight(node = 79, fill = "yellow", extend = 0.01) +
+  geom_highlight(node = 70, fill = "lightblue", extend = 0.015)
+
+p_highlight
+```
+
+## Create Your Own!
+
+Below is a code chunk to generate a random tree and a random dataset.
+
+`set.seed` is there to make the random chance repeatable. Make up a number yourself and replace the `1234` with it. This means that when you submit this to me, I will see the results you worked with, but everyone in our group will generate a different tree when they use a different number.
+
+`size` is there so you can decide how big you want your tree to be. Don't feel like you have to change this.
+
+```{r}
+set.seed(1234)
+size = 10
+
+random_tree <- rtree(size)
+
+random_data <- data.frame("ID" = random_tree$tip.label,
+                          "Location" = sample(c("QLD","NSW","VIC"), size, replace = TRUE),
+                          "Sex" = sample(c("Male", "Female"), size, replace = TRUE),
+                          "Travel" = sample(c("Overseas", ""), size, replace = TRUE, prob = c(0.2, 0.8)))
+```
+
+Now generate a tree in the below code chunk and visualise and colour it as you see fit.
+
+```{r}
+
+```
+
+Please feel free to add any comments on your tree / data or any general comments you have into the response section below:
+
+<div class="response">
+Enter text here.
+</div>
+
+To submit your response to me you can either email the `LFF_response.rmd` document and/or a compiled html page that you can knit by pressing the `Knit` option at the top of your main RStudio window. ![](Images/knit.png)
+
+This will generate a .html page in the folder you were working in. Email that to me.
+
+That's it. You are done!

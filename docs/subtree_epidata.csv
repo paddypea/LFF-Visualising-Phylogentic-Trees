@@ -1,45 +1,45 @@
-Sample_ID,serotype,Country,Continent,Travel_history,Year,Belgium,Source,Gender,gyrA_mutations,macrolide_resistance_genes,MIC_AZM,MIC_CIP
-Sample_178,Sonnei,Korea,Asia,,1985,No,Holt et al. 2012,,gyrA D87G,,,
-Sample_180,Sonnei,Korea,Asia,,1983,No,Holt et al. 2012,,gyrA D87G,,,
-Sample_179,Sonnei,Korea,Asia,,1981,No,Holt et al. 2012,,gyrA S83L,,,
-Sample_221,Sonnei,Korea,Asia,,1982,No,Holt et al. 2012,,gyrA S83L,,,
-Sample_214,Sonnei,Latin America,Latin America,,2008,No,Baker et al 2017,,,,,
-Sample_211,Sonnei,Latin America,Latin America,,UNK,No,Baker et al 2017,,,,,
-Sample_213,Sonnei,Latin America,Latin America,,2009,No,Baker et al 2017,,,,,
-Sample_212,Sonnei,East Africa & Madagascar,Africa,,2000,No,Holt et al. 2012,,,,,
-Sample_215,Sonnei,Europe,Europe,,1960,No,Holt et al. 2012,,,,,
-Sample_217,Sonnei,Europe,Europe,,2004,No,Holt et al. 2012,,,,,
-Sample_216,Sonnei,Europe,Europe,,1963,No,Holt et al. 2012,,,,,
-Sample_220,Sonnei,Europe,Europe,,1974,No,Holt et al. 2012,,,,,
-Sample_219,Sonnei,Europe,Europe,,1974,No,Holt et al. 2012,,,,,
-Sample_218,Sonnei,Europe,Europe,,1965,No,Holt et al. 2012,,,,,
-Sample_190,Sonnei,Europe,Europe,,1967,No,Holt et al. 2012,,,,,
-Sample_189,Sonnei,Europe,Europe,,1976,No,Holt et al. 2012,,,,,
-Sample_188,Sonnei,Europe,Europe,,2007,No,Holt et al. 2012,,,,,
-Sample_187,Sonnei,Caribbean/Central America,Latin America,,2006,No,Holt et al. 2012,,,,,
-Sample_182,Sonnei,East Africa & Madagascar,Africa,,2004,No,Holt et al. 2012,,,,,
-Sample_181,Sonnei,East Africa & Madagascar,Africa,,1998,No,Holt et al. 2012,,,,,
-Sample_186,Sonnei,Europe,Europe,,1966,No,Holt et al. 2012,,,,,
-Sample_185,Sonnei,Europe,Europe,,1973,No,Holt et al. 2012,,,,,
-Sample_184,Sonnei,Europe,Europe,,1944,No,Holt et al. 2012,,,,,
-Sample_183,Sonnei,Europe,Europe,,1945,No,Holt et al. 2012,,,,,
-Sample_210,Sonnei,Europe,Europe,,1992,No,Holt et al. 2012,,,,,
-Sample_209,Sonnei,Europe,Europe,,1974,No,Holt et al. 2012,,,,,
-Sample_208,Sonnei,Europe,Europe,,1958,No,Holt et al. 2012,,,,,
-Sample_207,Sonnei,Europe,Europe,,1967,No,Holt et al. 2012,,,,,
-Sample_206,Sonnei,Europe,Europe,,1991,No,Holt et al. 2012,,,,,
-Sample_196,Sonnei,Europe,Europe,,1991,No,Holt et al. 2012,,,,,
-Sample_195,Sonnei,Korea,Asia,,1981,No,Holt et al. 2012,,,,,
-Sample_194,Sonnei,Korea,Asia,,,No,Holt et al. 2012,,,,,
-Sample_193,Sonnei,Korea,Asia,,1980,No,Holt et al. 2012,,,,,
-Sample_192,Sonnei,Korea,Asia,,1987,No,Holt et al. 2012,,,,,
-Sample_191,Sonnei,Korea,Asia,,1982,No,Holt et al. 2012,,,,,
-Sample_203,Sonnei,Korea,Asia,,1979,No,Holt et al. 2012,,,,,
-Sample_202,Sonnei,North/West/Central Africa,Africa,,1973,No,Holt et al. 2012,,,,,
-Sample_205,Sonnei,SouthAmerica,Latin America,,1997,No,Holt et al. 2012,,,,,
-Sample_204,Sonnei,SouthAmerica,Latin America,,1997,No,Holt et al. 2012,,,,,
-Sample_201,Sonnei,Caribbean/Central America,Latin America,,2006,No,Holt et al. 2012,,,,,
-Sample_200,Sonnei,Europe,Europe,,1947,No,Holt et al. 2012,,,,,
-Sample_199,Sonnei,Europe,Europe,,2007,No,Holt et al. 2012,,,,,
-Sample_198,Sonnei,North/West/Central Africa,Africa,,2005,No,Holt et al. 2012,,,,,
-Sample_197,Sonnei,Europe,Europe,,1959,No,Holt et al. 2012,,,,,
+Sample_ID,Residence,Travel,Resistance,Sex
+Sample_178,NSW,International,Drug A,Female
+Sample_179,NSW,International,Drug A,Female
+Sample_180,VIC,International,Drug A,Male
+Sample_181,VIC,,,Unknown
+Sample_182,VIC,,,Unknown
+Sample_183,ACT,,,Unknown
+Sample_184,ACT,State,Drug C,Male
+Sample_185,ACT,,Drug C,Male
+Sample_186,ACT,,,Male
+Sample_187,VIC,,,Male
+Sample_188,VIC,,,Male
+Sample_189,VIC,,,Male
+Sample_190,VIC,,Drug C,Male
+Sample_191,QLD,,,Female
+Sample_192,QLD,,,Female
+Sample_193,QLD,,,Male
+Sample_194,QLD,State,,Male
+Sample_195,QLD,,,Male
+Sample_196,QLD,,,Female
+Sample_197,NSW,,Drug B,Unknown
+Sample_198,NSW,,Drug B,Female
+Sample_199,NSW,,Drug B,Female
+Sample_200,NSW,,Drug B,Female
+Sample_201,NSW,State,Drug B,Male
+Sample_202,NSW,State,Drug B,Female
+Sample_203,NSW,,Drug B,Female
+Sample_204,NSW,,Drug B,Male
+Sample_205,NSW,,Drug B,Male
+Sample_206,QLD,,Drug A,Female
+Sample_207,QLD,,Drug A,Female
+Sample_208,QLD,,Drug A,Male
+Sample_209,QLD,,,Male
+Sample_210,VIC,State,,Unknown
+Sample_211,Laos,,,Female
+Sample_212,Laos,,,Female
+Sample_213,Laos,,,Female
+Sample_214,Laos,,,Female
+Sample_215,Vietnam,,,Male
+Sample_216,Vietnam,,Drug C,Male
+Sample_217,Vietnam,,,Female
+Sample_218,Vietnam,,,Male
+Sample_219,Vietnam,,Drug C,Male
+Sample_220,Vietnam,,,Female
+Sample_221,NSW,State,,Unknown
