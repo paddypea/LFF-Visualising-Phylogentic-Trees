@@ -62,8 +62,8 @@ The files can either be found within the LFF folder. Or you can download them by
 -   <a href="LFF_response.Rmd">LFF_response.Rmd</a>
     -   the Rmarkdown document you will work in alongside this page later
 -   <a href="example_tree.txt">example_tree.txt</a>
+    -   tree file adapted from https://epirhandbook.com/en/
 -   <a href="subtree_epidata.csv">subtree_epidata.csv</a>
-    -   both files adapted from https://epirhandbook.com/en/
     
 Later in this exercise we will create a subtree from the big tree. The link below is the produced subtree if you are unable to create it and get stuck.
 
@@ -370,7 +370,7 @@ p_res <- p + geom_tiplab(aes(fill = Residence), geom = "label", size = 2)
 p_res
 ```
 
-Looking at this we can see some groupings and potential clades of samples based ont he tree structure and the regions.
+Looking at this we can see some groupings and potential clades of samples based on the tree structure and the regions.
 
 We can highlight clades of interest. This is done based on the internal **node** reference structure in the tree. The easiest way to identify these is to add the nodes to our plot for visual inspection. We do this by adding some text geometry and specify that we want to see the node labels and colour them so they are visible.
 
@@ -493,7 +493,7 @@ r <- ggtree(random_tree) + geom_tiplab()
 r
 ```
 
-I'm very interested to see what you can make!
+I'm interested to see what you can make!
 
 # Submission
 
