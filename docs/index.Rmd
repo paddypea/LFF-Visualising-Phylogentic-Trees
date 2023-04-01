@@ -16,7 +16,7 @@ output:
 This text is an RMarkdown comment so won't "render" when you "compile" this document -->
 
 ```{r setup, include=FALSE}
-rm(list = ls())
+# rm(list = ls())
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -54,20 +54,21 @@ There are a number of tools available to both view, manipulate and enhance tree 
     -   Apply quick transformations and pruning
 4.  Brief introduction to `rmarkdown` and the `pacman` approach to package management
 
-## You should have
+## What You Need
 
-Check you have the following files from the LFF folder provided.
+The files can either be found within the LFF folder. Or you can download them by clicking the links below (if they open as a text web page, right click and choose "save as"). This webpage is actually an Rmarkdown document hosted online. If you want to see the actual file, you can find it in the github this is hosted on.
 
--   VisualisingTrees.html
-    -   this file, good work!
 -   <a href="LFF_response.Rmd">LFF_response.Rmd</a>
-    -   the Rmarkdown document you will work in
--   Shigella_tree.txt
-    -   taken from https://epirhandbook.com/en/
--   Subtree.txt
-    -   a subtree of the previous tree - for if you get stuck later in an exercise
+    -   the Rmarkdown document you will work in alongside this page later
+-   <a href="example_tree.txt">example_tree.txt</a>
+-   <a href="subtree_epidata.csv">subtree_epidata.csv</a>
+    -   both files adapted from https://epirhandbook.com/en/
+    
+Later in this exercise we will create a subtree from the big tree. The link below is the produced subtree if you are unable to create it and get stuck.
 
-## Preamble
+-   <a href="subtree_backup.txt">subtree_backup.txt</a>
+
+## RStuidio Setup
 
 Some minor set up will be required. This will also serve as a brief introduction to `rmarkdown` as well as the `pacman` package, which can serve as a relatively straightforward way to facilitate a degree code transferability.
 
@@ -97,16 +98,14 @@ p_load(tidyverse,
        ggtree) # visualising trees with syntax like ggplot (included in tidyverse)
 ```
 
-We are ready to rock! Open up the response file you will be working alongside in for this LFF.
-
-> Open up the `LFF_response.rmd` file into RStudio
+We are ready to rock! We will actually not be starting in `R` but good on you for getting everything set up!
 
 
 # Interactive Tree of Life
 
 ## Introduction
 
-Firstly though we aren't going to start in RStudio! 
+Firstly we aren't going to start in RStudio! 
 
 The Interactive Tree of Life (iTOL) is a free web based interface to do phylogentic tree investigations and visulisations. 
 
@@ -262,7 +261,65 @@ The top right of your overall .rmd document window has the *Run* option that pre
 
 You can either copy paste a chunk set up or type manually the text to create a code chunk. Alternatively, you can use the keyboard shortcut: **ctrl + alt + i**. You can try this in **LFF_response.rmd**.
 
+There will be some questions for you to answer during this part of the exercise. This will be signified in the response document by the following:
+
+```
+<div class="response">
+Type your response in here.
+</div>
+```
+
+This is so your responses will stand out when looking at your final document. You can go over multiple lines, just make sure the first line has the ```<div class="response">``` and the final line has ```</div>```. 
+
 ## Importing Our Tree
+
+From here, much of the information may be similar or duplicated between this document and **LFF_response.rmd**. As you will run the code in there and follow along with the following outputs to get the same results!
+
+> Follow along below and in your response document
+
+Lets import the subtree we created in the iTOL section. At a basic import. It doesn't look like much when using the base `R` plotting as well as a basic `gg` plot from `ggtree`.
+
+```{r}
+tree <- read.tree("subtree.txt") # Import our tree file
+
+plot(tree) # Default plotting using base R
+
+ggtree(tree) # Default plotting using ggtree
+```
+
+You will also notice that when you run a chunk with multiple plots like this, they will tab themselves within the document. In this webpage they show up separately as this is how the document is knitted.
+
+![You can also press the left button in the top right corner to show this in a new window](Images/rmd_tab.png)
+
+
+
+
+
+
+
+Answer the following question in your response document.
+
+> **What are the differences between each of the tree in `R` and with the visualisation we had in iTOL?**
+
+The default `ggtree` does not include much since it requires you to be more explicit about what you want from it. The `gg` syntax can be summarised as your base data for your plot and then you add on (with a +) other visual pieces (geom's: geom ~ geomtry) to it.
+
+
+```{r}
+p <- ggtree(tree) + geom_tiplab(size = 3) # add on tip labels to your plot with the given size
+
+p # since the above line creates the 'p' object, we need to print it by writing it here
+```
+<div class="response">
+**Note:** When asigning a plot to a variable (`p` above), we need to then state it so it prints into the document. Because we are working in an rmarkdown document, you will notice it doesn't show up in the usual `RStudio` plot window. To do this, you can just type `p` enter into your `R` console since this is stored in your environment. You can try it now and see the plot show up in your plot window.
+</div>
+
+
+
+
+
+
+
+
 
 
 
