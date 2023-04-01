@@ -1,0 +1,309 @@
+---
+title: 'LFF: Visualising Phylogentic Trees'
+author: "Patrick Peacock"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    number_sections: yes
+    theme:
+      bootswatch: materia
+---
+
+<!-- Here be code dragons -->
+<!-- Ignore everything up to the sections in  the following code chunks and style setting.
+This text is an RMarkdown comment so won't "render" when you "compile" this document -->
+
+```{r setup, include=FALSE}
+rm(list = ls())
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<style>
+div.response {
+background-color: #DBDBDB;
+padding: 5px;
+border: 1px solid black;
+margin-left: 25px;
+border-radius: 5px;
+<!--font-style: italic;-->
+}
+</style>
+
+
+
+
+# Introduction
+
+Phylogentic trees. Everyone loves them. Particularly in the context of an outbreak they are great to look at the genomic relatedness (or not) between isolates collected from both clinical cases and environmental swabs.
+
+Generally trees have been put together by bioinformaticians and scientists working in whole genome sequencing (WGS) laboratories. However, in their raw form they can be challenging to correctly interpret and infer relevant information. WGS alone is not a silver bullet regarding outbreak investigations. WGS data, and by extension phylogentic visulisation of this data, depends on, and is greatly enhanced by, contextual epidemiological information.
+
+As such, there is a greater need for epidemiologists to be able to work with tree data to effectively communicate to stakeholders. Whether this be the progress of an outbreak, identifying suspected causative agents based on genomic relatedness, visualising contextual information for a pathogen for surveillance purposes, and many other reasons.
+
+There are a number of tools available to both view, manipulate and enhance tree data. In this Lesson From the Field you will use the Interactive Tree of Life (iTOL - <https://itol.embl.de/>) to do some very quick visulisation and inspection of trees. It is also possible to do annotations and apply metadata but this will be outside the scope of this LFF.
+
+## Learning objectives
+
+1.  Understand the importance of contextual epidemiological information for whole genome sequencing analysis
+2.  Execute `R` code to read in, manipulate and produce phylogentic trees
+    - Edit `R` code to customise outputs
+    - Apply some metadata to a phylogenetic tree
+3.  Use Interactive Tree Of Life to quickly view phylogenetic trees
+    -   Apply quick transformations and pruning
+4.  Brief introduction to `rmarkdown` and the `pacman` approach to package management
+
+## You should have
+
+Check you have the following files from the LFF folder provided.
+
+-   VisualisingTrees.html
+    -   this file, good work!
+-   lff_response.rmd
+    -   the Rmarkdown document you will work in
+-   Shigella_tree.txt
+    -   taken from https://epirhandbook.com/en/
+-   Subtree.txt
+    -   a subtree of the previous tree - for if you get stuck later in an exercise
+
+## Preamble
+
+Some minor set up will be required. This will also serve as a brief introduction to `rmarkdown` as well as the `pacman` package, which can serve as a relatively straightforward way to facilitate a degree code transferability.
+
+You have "r file to be entered" but before that we do some set up in the `R` console. 
+
+> Open RStudio
+
+First we will install the `pacman` package (https://cran.r-project.org/package=pacman). pacman is basically a wrapper for a lot of **pac**kage **man**agement tasks. The most useful one I have found is the `p_load` function, which says to load these libraries, and if they are not installed, to install them. If you work in a way where everybody uses `pacman` then you don't have to worry about what packages you need to install for someones script as they will happen automatically when you run it. 
+
+The only requirement is that you have this package installed yourself first and that you need to load it first in your code as normal.
+
+> Run the following in your RStudio command line.
+
+`install.packages("pacman")`
+
+Now you can have a convention that when you write a script you start with your code like the below example:
+
+```{r}
+library(pacman) # load the pacman package
+
+# The following then loads (and installs if missing) the following packages.
+# Having each package on a line like this allows for commenting to explain what/why each package is used
+
+p_load(tidyverse, 
+       rio, # package for easy import/export of data
+       treeio, # package for input/output tree data
+       ggtree) # visualising trees with syntax like ggplot (included in tidyverse)
+```
+
+We are ready to rock! Open up the response file you will be working alongside in for this LFF.
+
+> Open up the `LFF_response.rmd` file into RStudio
+
+
+# Interactive Tree of Life
+
+## Introduction
+
+Firstly though we aren't going to start in RStudio! 
+
+The Interactive Tree of Life (iTOL) is a free web based interface to do phylogentic tree investigations and visulisations. 
+
+It is very powerful as a tool itself and can also overlay metadata but For the purposes of this lesson we will keep this simple to demonstrate the utility of iTOL for doing a quick look at a tree.
+
+> Open the [iTOL homepage](https://itol.embl.de/) (https://itol.embl.de/)
+
+![](Images/iTOL_front.png)
+
+You can create an account if you wish to save trees but this is not needed. Click on the *Upload* button in the top bar.
+
+## Uploading a Tree
+
+Have a read of the page. There are a couple of options when uploading the tree. You can either *Browse* to your tree file or drag and drop it directly into the window.
+
+![](Images/iTOL_upload.png)
+
+You don't need to worry about the different tree file formats. In my experience, Newick is the most predominant and what we will be using.
+
+<div class="response">
+**Note:** There is some flexibility in the format of the filename *extension* that is uploaded. All tree files are basically a text file. iTOL (and `R` packages) will accept a few filetypes - it is what is inside that matters. Some tree files with be filename.**txt** or some will be filename.**tree**. This doesn't matter to us.
+</div>
+
+
+> Choose either method and upload `Shigella_tree.txt`.
+
+The page will autoload if you drag and drop, otherwise press the upload button if you browsed and selected.
+
+## Trees in iTOL
+
+You should now see the default view of a large tree. iTOL will default to a circle tree as this tends to be more appropriate for larger datasets. Smaller ones will default to a rectangular tree.
+
+You can zoom in with a mouse scroll wheel and click and drag the tree around. Hovering your mouse over labels will provide some technical information (or metadata if present).
+
+In the top right of the page you will see a control panel for the tree visualisation.
+
+![](Images/iTOL_panel.png){width=400px}
+
+> Try some of the different options in the **Basic** tab. 
+
+We won't be looking at the **Advanced** or **Datasets** tab. 
+
+Most options in the **Basic** should be reasonably self explanatory and will control things like the size, font, position and alignment of the labels. 
+
+Convention and preferences may vary but many seem to prefer **Label options** -> **Position** -> **At tips**. So that it can be easier to get a sense of branches and where labels match up on trees. Often though, if you zoom in to parts of large trees with many leaves when doing this they may overlapp. You can change the **Font Style** to a smaller number (by defaulted measured in pixels ~ px) to see clearer.
+
+![Size of 10px (left) vs 4px (right)](Images/iTOL_textsize.png)
+
+## Pruning a Tree
+
+iTOL can also be useful to easily *prune* a tree to a subset that you are interested in. For example, you have a large dataset of SARS-CoV-2 sequences containing a couple of sublineages. You want to further analyse one lineage or an outbreak sitting on its own branch.
+
+Prunning allows you to select a *node* / *clade* and all of the *leaves* contained within it.
+
+Lets prune our large tree to just look at the isolates that (depending on if you changed the rotation or arc of the visualisation) is on the upper right part of the circle tree. Hovering over the long node/branch it should indicate that this contains **44 leaves**.
+
+![](Images/iTOL_prune1.png)
+
+Clicking this will show a menu for **Clade functions**.
+
+<center>
+![](Images/iTOL_prune2.png)
+</center>
+
+<div class="response">
+**Note:** You can also click on labels to get **Leaf functions** in a similar way. This can often be useful to *Copy node ID* if you need to further examine a particular isolate in an associated linelisting or to copy this ID to highlight it through functions.
+</div>
+
+> Press **Add clade to pruned tree**
+
+This will highlight everything below in green and pop up a box with a summary of your pruning selection. You can add other branches if you need to include other clades or groups of isolates for analysis.
+
+> Press **Prune tree**
+
+Now you should have a greatly reduced tree that likely looks very strange presented as a circle. Use the control panel to fix this.
+
+> Use the control panel to change the **Mode** -> **Rectangular**.
+
+Presented now should be a style of tree you may have seen before. Similar you can add customisation here and prune further if need be but we will now use this to export this smaller subtree as a file.
+
+## Exporting a Tree
+
+The final tab on the *Control panel* is the *Export* tab. Using this we can export the current tree. We will do this with this pruned tree to use this smaller tree in some `R` visualisations.
+
+> Press **Export** tab on the **Control panel**
+
+The default format is *SVG* (a graphics picture format).
+
+> Change this to *Newick tree* under *Text* as below.
+
+![](Images/iTOL_export.png)
+
+Leave the other options at their default. For the *Filename* we will choose a name to go with the `R` file we will work on.
+
+> Set the file name option to **subtree** and press **Export**
+
+![](Images/iTOL_save.png)
+
+This should automatically prompt you to save the file somewhere or it will download automatically to your "Downloads" folder (or wherever you set this) depending on your browser settings.
+
+<div class="response">
+**!!IMPORTANT!!** Make sure you save/move this file to the same folder as the `LFF_response.rmd` file.
+</div>
+
+This concludes the iTOL section and now we will move to `RStudio`.
+
+
+
+# Trees in R
+
+Move to your `RStudio` session and open the `LFF_response.rmd` file to work in and write your responses into.
+
+You may get a notice or banner at the top to install some necessary packages such as `knitr`, please do this if asked.
+
+## A Brief Introduction to Rmarkdown
+
+The file you are working in is an Rmarkdown document. You may notice instead of every line being code with some comments like an `R` script. This one allows you to write a report and the code is separated into **chunks**.
+
+Firs thing you may notice is the block of code at the top. This header is basically the instructions to RStudio on how to compile the document and some basic information.
+
+> Edit your name (keeping the quote marks) into the header
+
+```
+---
+title: "LFF: Visualising Phylogentic Trees"
+author: "Your Name Here" # Edit your name into here
+date: "`r Sys.Date()`"
+output: html_document
+---
+```
+
+The output option says what format to compile the document into with the most common being `html_document`, `pdf_document` and `word_document`. You don't need to edit these in. When you choose to **Knit** the document, these options will be automatically added.
+
+This document you are reading now is a rendered html document, with a few more options added (such as to get the table of contents).
+
+Rmarkdown is an excellent way to blend your analysis with associated notes or documentation. Think of it like your data analysis lab journal. It allows you to perform chunks of analysis and rapily run and rerun chunks of code.
+
+![A chunk of R code in an .rmd document](Images/rmd_chunk.png)
+
+Yes. The technical term for these blocks of code is a *chunk*. 
+
+As above you can see that the area of code is defined by three back ticks \`\`\`{r} followed by your code and closed with another three backticks \`\`\`. 
+
+This allows you to just run the code within that section by pressing the green play arrow in the top right corner. The code is executed and the results are displayed in line within the document itself instead of in the `R` console. This is also nice to be able to go between parts of your analysis and keep results visible without needing to rerun a potentially lengthy script.
+
+The button in the middle with the downarrow and green line will run all code chunks **above** this chunk. This is very useful to run all earlier datacleaning or analysis that the chunk you are working in depends on. Either for when you come back to your document or to "refresh" your data to run your current chunk newly again.
+
+The left button in this corner allows you to set chunk options, but you will be very unlikely to need this.
+
+The top right of your overall .rmd document window has the *Run* option that pressing on also gives options about running chunks or individual lines of code.
+
+![](Images/rmd_run.png)
+
+You can either copy paste a chunk set up or type manually the text to create a code chunk. Alternatively, you can use the keyboard shortcut: **ctrl + alt + i**. You can try this in **LFF_response.rmd**.
+
+## Importing Our Tree
+
+
+
+
+```{r}
+random.tree <- rtree(10)
+
+rp <- ggtree(random.tree)
+rp
+```
+
+
+
+
+
+
+
+<div class="response">
+Example response
+
+Line breaks work alright?
+</div>
+
+
+
+
+## Setup
+
+```{r}
+subtree_1 <- read.tree("subtree_p.txt")
+
+subtree_2 <- read.tree("subtree_pex.txt")
+```
+
+```{r}
+
+ggtree(subtree_1) + geom_tiplab(size = 4) +  
+  geom_text(aes(label = node), size = 5, color = "darkred", hjust = 1, vjust = 1)
+
+
+
+```
+
+
