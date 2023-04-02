@@ -13,7 +13,9 @@ output:
 
 <!-- Here be code dragons -->
 <!-- Ignore everything up to the sections in  the following code chunks and style setting.
-This text is an RMarkdown comment so won't "render" when you "compile" this document -->
+This text is an RMarkdown comment so won't "render" when you "compile" this document 
+
+If you have found this, send me a message on Whatsapp :) -->
 
 ```{r setup, include=FALSE}
 rm(list = ls())
@@ -41,23 +43,27 @@ Phylogentic trees. Everyone loves them. Particularly in the context of an outbre
 
 Generally trees have been put together by bioinformaticians and scientists working in whole genome sequencing (WGS) laboratories. However, in their raw form they can be challenging to correctly interpret and infer relevant information. WGS alone is not a silver bullet regarding outbreak investigations. WGS data, and by extension phylogentic visulisation of this data, depends on, and is greatly enhanced by, contextual epidemiological information.
 
-As such, there is a greater need for epidemiologists to be able to work with tree data to effectively communicate to stakeholders. Whether this be the progress of an outbreak, identifying suspected causative agents based on genomic relatedness, visualising contextual information for a pathogen for surveillance purposes, and many other reasons.
+As such, there is a greater need for epidemiologists to be able to work with tree data to effectively communicate to stakeholders. Whether this be the progress of an outbreak, identifying suspected causative agents based on genomic relatedness, visualising contextual information for a pathogen for surveillance purposes, and many other reasons. There are a number of tools available to both view, manipulate and enhance tree data. 
 
-There are a number of tools available to both view, manipulate and enhance tree data. In this Lesson From the Field you will use the Interactive Tree of Life (iTOL - <https://itol.embl.de/>) to do some very quick visulisation and inspection of trees. It is also possible to do annotations and apply metadata but this will be outside the scope of this LFF.
+In this Lesson From the Field you will use the Interactive Tree of Life (iTOL - <https://itol.embl.de/>) to do some very quick visulisation, inspection and manipulation of trees. It is also possible to do annotations and apply metadata but this will be outside the scope of this LFF.
+
+You will then take a subset of the tree looked at in iTOL and import it into an Rmarkdown document to do some visualisations. This will also serve as a bit of an overview of Rmarkdown and its utility both for analysis developement as well as documenting your work and being able to produce reports from this. 
 
 ## Learning objectives
 
 1.  Understand the importance of contextual epidemiological information for whole genome sequencing analysis
-2.  Execute `R` code to read in, manipulate and produce phylogentic trees
+2.  Use Interactive Tree Of Life to quickly view phylogenetic trees
+    -   Apply quick transformations and pruning
+3.  Execute `R` code to read in, manipulate and produce phylogentic trees
     - Edit `R` code to customise outputs
     - Apply some metadata to a phylogenetic tree
-3.  Use Interactive Tree Of Life to quickly view phylogenetic trees
-    -   Apply quick transformations and pruning
-4.  Brief introduction to `rmarkdown` and the `pacman` approach to package management
+4.  Achieve a brief introduction to `rmarkdown` and the `pacman` approach to package management
 
-## What You Need
+## Overview and Resources
 
-The files can either be found within the LFF folder. Or you can download them by clicking the links below (if they open as a text web page, right click and choose "save as"). This webpage is actually an Rmarkdown document hosted online. If you want to see the actual file, you can find it in the github this is hosted on.
+The majority of this LFF will be following along this webpage. Later you will run, edit, and write some R code in the provided .rmd file. Some introductory resources to this have also been provided in the following sections.
+
+The files can either be found within the LFF folder. Or you can download them by clicking the links below (if they open as a text web page, right click and choose "save as"). This webpage is actually an Rmarkdown document hosted online. If you want to see the actual file, you can find it in the github repo this is hosted on - this is left as an exercise to the reader.
 
 -   <a href="LFF_response.Rmd">LFF_response.Rmd</a>
     -   the Rmarkdown document you will work in alongside this page later
@@ -162,7 +168,7 @@ Most options in the **Basic** should be reasonably self explanatory and will con
 
 Convention and preferences may vary but many seem to prefer **Label options** -> **Position** -> **At tips**. So that it can be easier to get a sense of branches and where labels match up on trees. Often though, if you zoom in to parts of large trees with many leaves when doing this they may overlapp. You can change the **Font Style** to a smaller number (by defaulted measured in pixels ~ px) to see clearer.
 
-![Size of 10px (left) vs 4px (right)](Images/iTOL_textsize.png)
+![Size of 10px (left) vs 4px (right) - note the labels will be different on your screen as they were changed to more easily generate and match epid data later.](Images/iTOL_textsize.png)
 
 ## Pruning a Tree
 
@@ -228,7 +234,7 @@ This concludes the iTOL section and now we will move to `RStudio`.
 
 Move to your `RStudio` session and open the `LFF_response.rmd` file to work in and write your responses into.
 
-You may get a notice or banner at the top to install some necessary packages such as `knitr`, please do this if asked.
+You may get a notice or banner at the top to install some necessary packages such as `knitr` or `rmarkdown`, please press **install** if asked.
 
 ## A Brief Introduction to Rmarkdown
 
@@ -236,7 +242,7 @@ The file you are working in is an Rmarkdown document. You may notice instead of 
 
 Firs thing you may notice is the block of code at the top. This header is basically the instructions to RStudio on how to compile the document and some basic information.
 
-> Edit your name (keeping the quote marks) into the header
+> Edit your name (within the quote marks) into the header
 
 ```
 ---
@@ -299,9 +305,9 @@ ggtree(tree) # Default plotting using ggtree
 ggtree(tree, layout = "circular") # By default ggtree will plot rectangular, use this to plot circular
 ```
 
-You will also notice that when you run a chunk with multiple plots like this, they will tab themselves within the document. In this webpage they show up separately as this is how the document is knitted.
+You will also notice that when you run a chunk with multiple plots like this, they will tab themselves within the document. In this webpage they show up separately with each code line between as when documents are knitted, outputs are presented as they go.
 
-![You can also press the left button in the top right corner to show this in a new window](Images/rmd_tab.png)
+![You can also press the left most button in the top right corner to show this in a new window](Images/rmd_tab.png)
 
 Answer the following question in your response document.
 
@@ -414,7 +420,7 @@ Your turn to add the final group at node `60`.
 
 Lets go back to our clean tree and show another way to add epidata.
 
-We can also add a variable to the end of the leaves of our tree. Lets do that for the `Sex` variable.
+We can also add a variable to the end of the leaves of our tree. Lets do that for the `Sex` variable. This is using the geometry `geom_tippoint` as we are colouring in the points of each tip of the tree.
 
 ```{r}
 p_tip <- p + geom_tiplab(size = 2) + # To add the basic sampe_id back
@@ -425,11 +431,11 @@ p_tip
 
 ## Adding Heatmaps - EXTENSION ONLY
 
-Heatmaps can get reasonably complex and this area is a bit under development with some new packages being added.
+Heatmaps can get reasonably complex when trying to add them to plots. In the `R` world there seem to be a few options with some newer packages being developed and actively worked on.
 
-This is included just for reference and peoples curiosity. You can copy this code and run it but this is not expected.
+This is included just for reference and peoples interest.  You can copy this code and run it but this is not expected.
 
-This is challenging to automate and requires a bit of tuning of parameters to get these to look nice and we will look at some of this during our session.
+This is challenging to automate as a part of regular reporting.  These plots requires tuning of parameters to look nice and format properly when working on just one set of outbreak data (*ask me how I know that~~~~~~*) 
 
 ```{r message=FALSE}
 p_load(ggnewscale) # We need another library for compilation
@@ -470,7 +476,6 @@ p_heat
 # Random Tree Exercise
 
 The final section in the response document will generate a randomly shaped tree and random dataset for you to use to create a plot based on what you have learned during this session.
-
 
 Below is a code chunk to generate a random tree and a random dataset.
 
