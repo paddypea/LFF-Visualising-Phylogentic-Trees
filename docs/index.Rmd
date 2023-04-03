@@ -39,7 +39,7 @@ border-radius: 5px;
 
 # Introduction
 
-Phylogentic trees. Everyone loves them. Particularly in the context of an outbreak they are great to look at the genomic relatedness (or not) between isolates collected from both clinical cases and environmental swabs.
+Phylogentic trees. Everyone loves them. Particularly in the context of an outbreak they are great to look at the genomic relatedness (or not) between isolates collected from both clinical cases and environmental samples.
 
 Generally trees have been put together by bioinformaticians and scientists working in whole genome sequencing (WGS) laboratories. However, in their raw form they can be challenging to correctly interpret and infer relevant information. WGS alone is not a silver bullet regarding outbreak investigations. WGS data, and by extension phylogentic visulisation of this data, depends on, and is greatly enhanced by, contextual epidemiological information.
 
@@ -85,18 +85,28 @@ You have "r file to be entered" but before that we do some set up in the `R` con
 
 First we will install the `pacman` package (https://cran.r-project.org/package=pacman). pacman is basically a wrapper for a lot of **pac**kage **man**agement tasks. The most useful one I have found is the `p_load` function, which says to load these libraries, and if they are not installed, to install them. If you work in a way where everybody uses `pacman` then you don't have to worry about what packages you need to install for someones script as they will happen automatically when you run it. 
 
-The only requirement is that you have this package installed yourself first and that you need to load it first in your code as normal.
+The only requirement is that you have this package installed yourself first and that you need to load it first in your code as normal. 
 
-> Run the following in your RStudio command line.
+<div class="response">
+**Whoops!** I had not realised that many of these *bioinformatics* like packages are managed by a thing called `Bioconductor`. This requires some additional set up. Thank you Tilda!
+</div>
 
-`install.packages("pacman")`
+> Run the following two lines of code in your RStudio command line.
+
+```
+install.packages(c("pacman", "BiocManager"))
+
+BiocManager::install(c("ggtree", "treeio"))
+```
+
+The `::` means we are using a library but without loading it so we can use a function within it if we only need to once or twice, typically for a special use like this.
 
 Now you can have a convention that when you write a script you start with your code like the below example:
 
 ```{r}
 library(pacman) # load the pacman package
 
-# The following then loads (and installs if missing) the following packages.
+# The following then loads (and installs if missing - for most R packages (those on CRAN)) the following packages.
 # Having each package on a line like this allows for commenting to explain what/why each package is used
 
 p_load(tidyverse, 
@@ -110,6 +120,7 @@ While we are here, lets check we have installed / updated the packages needed fo
 > Run the following in your RStudio command line.
 
 `install.packages(c("rmarkdown", "knitr"))`
+
 
 We are ready to rock! We will actually not be starting in `R` but good on you for getting everything set up!
 
