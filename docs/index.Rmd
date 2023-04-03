@@ -146,7 +146,7 @@ You don't need to worry about the different tree file formats. In my experience,
 </div>
 
 
-> Choose either method and upload `Shigella_tree.txt`.
+> Choose either method and upload `example_tree.txt`.
 
 The page will autoload if you drag and drop, otherwise press the upload button if you browsed and selected.
 
